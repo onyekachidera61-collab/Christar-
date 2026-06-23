@@ -1,0 +1,477 @@
+/* ═══════════════════════════════════════════════════════════
+   LUDO NAIRA  –  Complete frontend stylesheet
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Reset / base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  overflow-x: hidden;
+}
+
+/* ── Screen management ─────────────────────────────────────── */
+.screen       { display: none; }
+.screen.active{ display: flex; flex-direction: column; min-height: 100vh; }
+.hidden       { display: none !important; }
+
+/* ── Colour palette variables ──────────────────────────────── */
+:root {
+  --red:    #e53935;
+  --green:  #43a047;
+  --yellow: #fdd835;
+  --blue:   #1e88e5;
+
+  --red-light:    #ffcdd2;
+  --green-light:  #c8e6c9;
+  --yellow-light: #fff9c4;
+  --blue-light:   #bbdefb;
+
+  --red-dark:    #b71c1c;
+  --green-dark:  #1b5e20;
+  --yellow-dark: #f57f17;
+  --blue-dark:   #0d47a1;
+
+  --safe-bg: #fff8e1;
+  --safe-border: #ffc107;
+  --board-bg: #f5f0e8;
+  --track-bg: #ffffff;
+  --track-border: #ccc;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAME-ENTRY SCREEN
+   ══════════════════════════════════════════════════════════════ */
+#nameScreen {
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+.name-box {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 40px 36px;
+  width: min(400px, 90vw);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+.logo {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.name-box h2 { font-size: 1.2rem; margin-bottom: 24px; opacity: .8; }
+.name-box input[type="text"] {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color .2s;
+}
+.name-box input:focus { border-color: var(--yellow); }
+.name-box button, .btn-primary {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--yellow) 0%, #ff8f00 100%);
+  color: #000;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .1s, box-shadow .2s;
+}
+.name-box button:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,193,7,.4); }
+.name-box button:active { transform: translateY(0); }
+.hint { margin-top: 14px; font-size: .85rem; opacity: .55; }
+
+/* ══════════════════════════════════════════════════════════════
+   OVERLAYS  (waiting, winner)
+   ══════════════════════════════════════════════════════════════ */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(4px);
+}
+.overlay-box {
+  background: #16213e;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 16px;
+  padding: 40px 36px;
+  text-align: center;
+  min-width: 240px;
+  max-width: 90vw;
+}
+.overlay-box h2 { font-size: 1.5rem; margin-bottom: 20px; }
+.overlay-box p  { margin-bottom: 20px; opacity: .8; }
+.overlay-box .btn-secondary,
+.overlay-box button {
+  padding: 10px 28px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+.overlay-box button:hover { background: rgba(255,255,255,.1); }
+
+/* Spinner */
+.spinner {
+  width: 50px; height: 50px;
+  border: 4px solid rgba(255,255,255,.15);
+  border-top-color: var(--yellow);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Winner box */
+.winner-box { animation: popIn .4s ease-out; }
+.trophy { font-size: 4rem; margin-bottom: 12px; }
+@keyframes popIn {
+  from { transform: scale(.6); opacity: 0; }
+  to   { transform: scale(1);  opacity: 1; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GAME SCREEN
+   ══════════════════════════════════════════════════════════════ */
+#gameScreen {
+  align-items: center;
+  justify-content: flex-start;
+  background: #1a1a2e;
+  padding: 16px 8px;
+}
+.game-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ── Players panel ─────────────────────────────────────────── */
+.players-panel {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+.player-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.06);
+  border: 2px solid transparent;
+  transition: border-color .25s, transform .2s;
+  min-width: 130px;
+}
+.player-card.active { border-color: var(--yellow); transform: scale(1.04); }
+.player-color-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,.4);
+}
+.player-card.player-red    .player-color-dot { background: var(--red);    }
+.player-card.player-green  .player-color-dot { background: var(--green);  }
+.player-card.player-yellow .player-color-dot { background: var(--yellow); }
+.player-card.player-blue   .player-color-dot { background: var(--blue);   }
+.player-card.player-red    { border-color: rgba(229,57,53,.4);  }
+.player-card.player-green  { border-color: rgba(67,160,71,.4);  }
+.player-card.player-yellow { border-color: rgba(253,216,53,.4); }
+.player-card.player-blue   { border-color: rgba(30,136,229,.4); }
+.player-card.active.player-red    { border-color: var(--red);    }
+.player-card.active.player-green  { border-color: var(--green);  }
+.player-card.active.player-yellow { border-color: var(--yellow); }
+.player-card.active.player-blue   { border-color: var(--blue);   }
+.player-name  { font-weight: 700; font-size: .9rem; white-space: nowrap; overflow: hidden; max-width: 100px; text-overflow: ellipsis;}
+.player-home  { font-size: .75rem; opacity: .65; }
+
+/* ── Turn indicator ────────────────────────────────────────── */
+.turn-indicator {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.08);
+  letter-spacing: .3px;
+  min-height: 34px;
+  display: flex; align-items: center; justify-content: center;
+}
+.turn-indicator.my-turn { background: rgba(253,216,53,.18); color: var(--yellow); }
+
+/* ══════════════════════════════════════════════════════════════
+   LUDO BOARD  –  15 × 15 CSS Grid
+   ══════════════════════════════════════════════════════════════ */
+.board-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.ludo-board {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows:    repeat(15, 1fr);
+  width:  min(480px, 95vw);
+  height: min(480px, 95vw);
+  border: 3px solid #333;
+  border-radius: 6px;
+  background: var(--board-bg);
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  flex-shrink: 0;
+}
+
+/* ── Generic cell ──────────────────────────────────────────── */
+.board-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1px;
+  border: 0.5px solid rgba(0,0,0,.12);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── Yard areas (corners 6×6) ──────────────────────────────── */
+.yard {
+  background: var(--track-bg);
+  border-color: rgba(0,0,0,.05);
+}
+/* Inner token-holding area: cells 1-4 within each yard (class applied in JS) */
+.yard-inner-red    { background: var(--red);    }
+.yard-inner-green  { background: var(--green);  }
+.yard-inner-yellow { background: var(--yellow); }
+.yard-inner-blue   { background: var(--blue);   }
+
+/* Outer yard border cells (colored header/footer rows of each yard) */
+.yard-red-bg    { background: var(--red-light);    }
+.yard-green-bg  { background: var(--green-light);  }
+.yard-yellow-bg { background: var(--yellow-light); }
+.yard-blue-bg   { background: var(--blue-light);   }
+
+/* ── Main track cells ──────────────────────────────────────── */
+.track {
+  background: var(--track-bg);
+  border: 0.5px solid #ccc;
+}
+
+/* ── Safe cells ────────────────────────────────────────────── */
+.safe {
+  background: var(--safe-bg) !important;
+  border-color: var(--safe-border) !important;
+}
+.safe::after {
+  content: '★';
+  font-size: .55em;
+  color: var(--safe-border);
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ── Home-column (coloured inner arms) ─────────────────────── */
+.home-red    { background: var(--red-light);    border-color: var(--red);    }
+.home-green  { background: var(--green-light);  border-color: var(--green);  }
+.home-yellow { background: var(--yellow-light); border-color: var(--yellow); }
+.home-blue   { background: var(--blue-light);   border-color: var(--blue);   }
+
+/* ── Centre home area ──────────────────────────────────────── */
+.center-win {
+  background: linear-gradient(
+    to bottom right,
+    var(--red-light) 0% 25%,
+    var(--green-light) 25% 50%,
+    var(--yellow-light) 50% 75%,
+    var(--blue-light) 75% 100%
+  );
+  font-size: .5em;
+  font-weight: 800;
+  color: #333;
+}
+.center-tl  { background: var(--red-light);    }
+.center-tr  { background: var(--green-light);  }
+.center-bl  { background: var(--blue-light);   }
+.center-br  { background: var(--yellow-light); }
+
+/* ── Blank / padding cells ─────────────────────────────────── */
+.blank { background: var(--board-bg); border-color: transparent; }
+
+/* ══════════════════════════════════════════════════════════════
+   TOKENS
+   ══════════════════════════════════════════════════════════════ */
+.token {
+  width:  62%;
+  height: 62%;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.7);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.4);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+/* When multiple tokens in the same cell, shrink them */
+.board-cell .token:nth-child(2) { width: 46%; height: 46%; }
+.board-cell .token:nth-child(3) { width: 40%; height: 40%; }
+.board-cell .token:nth-child(4) { width: 36%; height: 36%; }
+
+.token-red    { background: var(--red);    }
+.token-green  { background: var(--green);  }
+.token-yellow { background: var(--yellow); }
+.token-blue   { background: var(--blue);   }
+
+/* Yard tokens (bigger since yard cells are bigger) */
+.yard .token { width: 55%; height: 55%; }
+
+/* Movable / selectable highlight */
+.token.movable {
+  animation: pulse 0.8s ease-in-out infinite;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px gold;
+  z-index: 10;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1);    }
+  50%       { transform: scale(1.18); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CONTROLS (dice + buttons)
+   ══════════════════════════════════════════════════════════════ */
+.controls {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.dice-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,.06);
+  border-radius: 14px;
+  padding: 12px 20px;
+}
+
+/* Die */
+.die-wrap { display: flex; align-items: center; justify-content: center; }
+.die {
+  width: 52px; height: 52px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 -3px 0 #bbb, 0 3px 8px rgba(0,0,0,.4);
+  border: 2px solid #ddd;
+  transition: transform .1s;
+}
+.die-face {
+  font-size: 2rem;
+  line-height: 1;
+  pointer-events: none;
+}
+.die.rolling { animation: diceRoll .6s ease-out; }
+@keyframes diceRoll {
+  0%   { transform: rotate(0deg)   scale(1);   }
+  20%  { transform: rotate(-25deg) scale(1.1); }
+  40%  { transform: rotate(20deg)  scale(0.9); }
+  60%  { transform: rotate(-15deg) scale(1.1); }
+  80%  { transform: rotate(10deg)  scale(0.95);}
+  100% { transform: rotate(0deg)   scale(1);   }
+}
+
+/* Roll / Skip buttons */
+.roll-btn, .skip-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .1s, opacity .2s;
+  white-space: nowrap;
+}
+.roll-btn {
+  background: linear-gradient(135deg, var(--yellow) 0%, #ff8f00 100%);
+  color: #000;
+}
+.roll-btn:disabled { opacity: .35; cursor: not-allowed; transform: none !important; }
+.roll-btn:not(:disabled):hover  { transform: translateY(-1px); }
+.roll-btn:not(:disabled):active { transform: translateY(0); }
+
+.skip-btn {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.25);
+}
+.skip-btn:hover { background: rgba(255,255,255,.2); }
+
+/* ══════════════════════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 24px;
+  font-size: .9rem;
+  z-index: 300;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  animation: fadeInUp .25s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0);    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+@media (min-width: 600px) {
+  .game-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 900px;
+    gap: 24px;
+  }
+  .players-panel { flex-direction: column; width: 180px; }
+  .player-card   { width: 100%; }
+  .board-column  { flex: 1; }
+}
+@media (max-width: 400px) {
+  .dice-area { gap: 10px; padding: 10px 12px; }
+  .roll-btn, .skip-btn { padding: 8px 14px; font-size: .8rem; }
+  .die { width: 44px; height: 44px; }
+  .die-face { font-size: 1.6rem; }
+}
