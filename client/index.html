@@ -3,296 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ludo Naira - Multiplayer Ludo Game</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/responsive.css">
-  <link rel="stylesheet" href="/css/animations.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <title>Ludo Naira – Multiplayer</title>
+  <link rel="stylesheet" href="ludo.css">
 </head>
 <body>
-  <div id="app">
-    <!-- Navigation -->
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="logo">
-          <i class="fas fa-dice"></i>
-          <span>Ludo Naira</span>
-        </div>
-        <div class="nav-menu" id="navMenu">
-          <a href="#" class="nav-link" onclick="showHome()">Home</a>
-          <a href="#" class="nav-link" onclick="showGames()">Play</a>
-          <a href="#" class="nav-link" onclick="showLeaderboard()">Leaderboard</a>
-          <a href="#" class="nav-link" onclick="showWallet()">Wallet</a>
-          <a href="#" class="nav-link" id="profileLink" onclick="showProfile()">Profile</a>
-          <a href="#" class="nav-link btn-logout" onclick="logout()">Logout</a>
-        </div>
-        <div class="hamburger" id="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    </nav>
 
-    <!-- Auth Screens -->
-    <div id="authContainer" class="auth-container">
-      <!-- Login Screen -->
-      <div id="loginScreen" class="screen active">
-        <div class="auth-box">
-          <h1>Login to Ludo Naira</h1>
-          <form onsubmit="handleLogin(event)">
-            <div class="form-group">
-              <input type="email" id="loginEmail" placeholder="Email" required>
-            </div>
-            <div class="form-group">
-              <input type="password" id="loginPassword" placeholder="Password" required>
-            </div>
-            <button type="submit" class="btn-primary">Login</button>
-            <p class="auth-switch">Don't have account? <a href="#" onclick="switchToRegister()">Register</a></p>
-          </form>
-        </div>
-      </div>
-
-      <!-- Register Screen -->
-      <div id="registerScreen" class="screen">
-        <div class="auth-box">
-          <h1>Create Account</h1>
-          <form onsubmit="handleRegister(event)">
-            <div class="form-group">
-              <input type="text" id="regUsername" placeholder="Username" required>
-            </div>
-            <div class="form-group">
-              <input type="email" id="regEmail" placeholder="Email" required>
-            </div>
-            <div class="form-group">
-              <input type="password" id="regPassword" placeholder="Password" required>
-            </div>
-            <button type="submit" class="btn-primary">Register</button>
-            <p class="auth-switch">Have account? <a href="#" onclick="switchToLogin()">Login</a></p>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main App Container -->
-    <div id="appContainer" class="app-container" style="display: none;">
-      <!-- Home Screen -->
-      <div id="homeScreen" class="screen active">
-        <div class="home-hero">
-          <h1>Welcome to Ludo Naira</h1>
-          <p>Play Ludo Online and Win Real Money!</p>
-          <div class="hero-buttons">
-            <button class="btn-primary" onclick="showGames()">Play Now</button>
-            <button class="btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
-          </div>
-        </div>
-        <div class="features">
-          <div class="feature-card">
-            <i class="fas fa-users"></i>
-            <h3>Multiplayer</h3>
-            <p>Play with friends or meet new players</p>
-          </div>
-          <div class="feature-card">
-            <i class="fas fa-money-bill"></i>
-            <h3>Win Money</h3>
-            <p>Compete in money matches and tournaments</p>
-          </div>
-          <div class="feature-card">
-            <i class="fas fa-trophy"></i>
-            <h3>Tournaments</h3>
-            <p>Join exciting tournaments with big prizes</p>
-          </div>
-          <div class="feature-card">
-            <i class="fas fa-bolt"></i>
-            <h3>Real-time Gaming</h3>
-            <p>Instant gameplay with live updates</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Games Screen -->
-      <div id="gamesScreen" class="screen">
-        <div class="container">
-          <h2>Select Game Mode</h2>
-          <div class="game-modes">
-            <div class="mode-card" onclick="startFreeGame(2)">
-              <i class="fas fa-handshake"></i>
-              <h3>Free Match 2P</h3>
-              <p>Play for free with another player</p>
-            </div>
-            <div class="mode-card" onclick="startFreeGame(4)">
-              <i class="fas fa-handshake"></i>
-              <h3>Free Match 4P</h3>
-              <p>Play for free with 4 players</p>
-            </div>
-            <div class="mode-card" onclick="showMoneyMatch(2)">
-              <i class="fas fa-coins"></i>
-              <h3>Money Match 2P</h3>
-              <p>Compete and win money</p>
-            </div>
-            <div class="mode-card" onclick="showMoneyMatch(4)">
-              <i class="fas fa-coins"></i>
-              <h3>Money Match 4P</h3>
-              <p>Compete and win money</p>
-            </div>
-            <div class="mode-card" onclick="showTournaments()">
-              <i class="fas fa-trophy"></i>
-              <h3>Tournaments</h3>
-              <p>Join tournaments for big prizes</p>
-            </div>
-            <div class="mode-card" onclick="showPrivateRoom()">
-              <i class="fas fa-lock"></i>
-              <h3>Private Room</h3>
-              <p>Play with specific players</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Game Screen -->
-      <div id="gameScreen" class="screen">
-        <div class="game-wrapper">
-          <div class="game-board-container">
-            <div class="game-info">
-              <div class="player-info" id="playerInfo"></div>
-              <div class="timer" id="timer">30</div>
-              <button class="btn-secondary" onclick="showGames()">Exit Game</button>
-            </div>
-            <div class="ludo-board" id="ludoBoard"></div>
-            <div class="game-controls">
-              <button class="btn-primary" id="diceBtn" onclick="rollDice()">Roll Dice</button>
-              <div class="dice-display" id="diceDisplay"></div>
-              <button class="btn-secondary" id="skipBtn" onclick="skipTurn()" style="display: none;">Skip Turn</button>
-            </div>
-          </div>
-          <div class="game-sidebar">
-            <div class="game-chat" id="gameChat"></div>
-            <div class="chat-input">
-              <input type="text" id="chatInput" placeholder="Say something...">
-              <button onclick="sendMessage()">Send</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Leaderboard Screen -->
-      <div id="leaderboardScreen" class="screen">
-        <div class="container">
-          <h2>Top Players</h2>
-          <table class="leaderboard-table" id="leaderboardTable">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Wins</th>
-                <th>Win Rate</th>
-                <th>Earnings</th>
-              </tr>
-            </thead>
-            <tbody id="leaderboardBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Wallet Screen -->
-      <div id="walletScreen" class="screen">
-        <div class="container">
-          <h2>My Wallet</h2>
-          <div class="wallet-card">
-            <h3>Current Balance</h3>
-            <div class="balance" id="balance">₦0.00</div>
-            <div class="wallet-actions">
-              <button class="btn-primary" onclick="showDepositModal()">Deposit</button>
-              <button class="btn-secondary" onclick="showWithdrawModal()">Withdraw</button>
-            </div>
-          </div>
-          <div class="transactions">
-            <h3>Transaction History</h3>
-            <table class="transactions-table" id="transactionsTable">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Type</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="transactionsBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Profile Screen -->
-      <div id="profileScreen" class="screen">
-        <div class="container">
-          <h2>My Profile</h2>
-          <div class="profile-card">
-            <div class="profile-header">
-              <img id="profileAvatar" src="/assets/default-avatar.png" alt="Avatar" class="avatar">
-              <div class="profile-info">
-                <h3 id="profileUsername"></h3>
-                <p id="profileEmail"></p>
-              </div>
-            </div>
-            <div class="profile-stats">
-              <div class="stat">
-                <span class="label">Total Matches</span>
-                <span class="value" id="totalMatches">0</span>
-              </div>
-              <div class="stat">
-                <span class="label">Wins</span>
-                <span class="value" id="winCount">0</span>
-              </div>
-              <div class="stat">
-                <span class="label">Total Earnings</span>
-                <span class="value" id="totalEarnings">₦0.00</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- ── Name-entry screen ─────────────────────────────── -->
+  <div id="nameScreen" class="screen active">
+    <div class="name-box">
+      <div class="logo">🎲 Ludo Naira</div>
+      <h2>Enter Your Name</h2>
+      <input type="text" id="playerNameInput" placeholder="Your name"
+             maxlength="20" autocomplete="off">
+      <button id="findMatchBtn" onclick="startFindMatch()">Find Match</button>
+      <p class="hint">Free 2-player match</p>
     </div>
   </div>
 
-  <!-- Modals -->
-  <div id="depositModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeDepositModal()">&times;</span>
-      <h2>Deposit Funds</h2>
-      <form onsubmit="processDeposit(event)">
-        <div class="form-group">
-          <input type="number" id="depositAmount" placeholder="Enter amount" min="100" required>
-        </div>
-        <button type="submit" class="btn-primary">Deposit</button>
-      </form>
+  <!-- ── Waiting overlay ───────────────────────────────── -->
+  <div id="waitingOverlay" class="overlay hidden">
+    <div class="overlay-box">
+      <div class="spinner"></div>
+      <p id="waitingText">Searching for opponent…</p>
+      <button class="btn-secondary" onclick="cancelMatch()">Cancel</button>
     </div>
   </div>
 
-  <div id="withdrawModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeWithdrawModal()">&times;</span>
-      <h2>Withdraw Funds</h2>
-      <form onsubmit="processWithdrawal(event)">
-        <div class="form-group">
-          <input type="number" id="withdrawAmount" placeholder="Enter amount" min="100" required>
+  <!-- ── Game screen ───────────────────────────────────── -->
+  <div id="gameScreen" class="screen hidden">
+    <div class="game-layout">
+
+      <!-- Player info panel -->
+      <div id="playersPanel" class="players-panel"></div>
+
+      <!-- Board + controls column -->
+      <div class="board-column">
+        <div id="turnIndicator" class="turn-indicator"></div>
+        <div id="ludoBoard" class="ludo-board"></div>
+        <div class="controls">
+          <div id="diceArea" class="dice-area">
+            <div class="die-wrap">
+              <div id="dieEl" class="die">
+                <span id="dieFace" class="die-face">🎲</span>
+              </div>
+            </div>
+            <button id="rollBtn" class="roll-btn" onclick="onRollDice()" disabled>
+              Roll Dice
+            </button>
+            <button id="skipBtn" class="skip-btn hidden" onclick="onSkipTurn()">
+              Skip Turn
+            </button>
+          </div>
         </div>
-        <div class="form-group">
-          <input type="text" placeholder="Bank Name" required>
-        </div>
-        <div class="form-group">
-          <input type="text" placeholder="Account Number" required>
-        </div>
-        <button type="submit" class="btn-primary">Withdraw</button>
-      </form>
+      </div>
+
     </div>
   </div>
+
+  <!-- ── Winner overlay ───────────────────────────────── -->
+  <div id="winnerOverlay" class="overlay hidden">
+    <div class="overlay-box winner-box">
+      <div class="trophy">🏆</div>
+      <h2 id="winnerText">Player wins!</h2>
+      <button class="btn-primary" onclick="location.reload()">Play Again</button>
+    </div>
+  </div>
+
+  <!-- ── Error toast ───────────────────────────────────── -->
+  <div id="errorToast" class="toast hidden"></div>
 
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  <script src="/js/main.js"></script>
-  <script src="/js/game.js"></script>
-  <script src="/js/socket-client.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/utils.js"></script>
+  <script src="ludo.js"></script>
 </body>
 </html>

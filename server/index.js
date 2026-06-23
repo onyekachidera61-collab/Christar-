@@ -36,6 +36,7 @@ const matchRoutes = require('./routes/match');
 const tournamentRoutes = require('./routes/tournament');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
+const guestRoutes = require('./routes/guest');
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -44,6 +45,7 @@ app.use('/api/match', matchRoutes);
 app.use('/api/tournament', tournamentRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/guest', guestRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
